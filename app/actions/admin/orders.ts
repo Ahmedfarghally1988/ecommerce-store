@@ -85,3 +85,14 @@ export async function adminUpdateOrderAddress(id: string, newAddress: { city: st
   revalidatePath(`/admin/orders/${id}`);
   return JSON.parse(JSON.stringify(updatedOrder));
 }
+
+export async function deleteOrder(id: string) {
+  await checkActionPermission('orders.delete');
+  
+  const order = await prisma.order.delete({
+    where: { id },
+  });
+
+  revalidatePath('/admin/orders');
+  return JSON.parse(JSON.stringify(order));
+}

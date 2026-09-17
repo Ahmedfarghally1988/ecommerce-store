@@ -6,9 +6,10 @@ import { usePathname } from 'next/navigation';
 import { Order, OrderStatus, PaymentStatus } from '@prisma/client';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/shared/ui/Table';
 import { useToast } from '@/components/shared/ui/Toast';
-import { updateOrderStatus, updatePaymentStatus } from '@/app/actions/admin/orders';
+import { updateOrderStatus, updatePaymentStatus, deleteOrder } from '@/app/actions/admin/orders';
 import { useCart } from '@/lib/cart-context';
 import { formatPrice } from '@/lib/format';
+import { Trash2 } from 'lucide-react';
 
 export function OrdersClient({ orders }: { orders: Order[] }) {
   const { showToast } = useToast();
@@ -54,6 +55,20 @@ export function OrdersClient({ orders }: { orders: Order[] }) {
       showToast('تم تحديث حالة الدفع', 'success');
     } catch (error) {
       showToast('فشل تحديث حالة الدفع', 'error');
+    } finally {
+      setUpdatingId(null);
+    }
+  };
+
+  const handleDeleteOrder = async (id: string) => {
+    if (!window.confirm('هل أنت متأكد من حذف هذا الطلب نهائياً؟ لا يمكن التراجع عن هذه العملية.')) return;
+    
+    setUpdatingId(id);
+    try {
+      await deleteOrder(id);
+      showToast('تم حذف الطلب بنجاح', 'success');
+    } catch (error) {
+      showToast('فشل حذف الطلب', 'error');
     } finally {
       setUpdatingId(null);
     }
@@ -107,6 +122,7 @@ export function OrdersClient({ orders }: { orders: Order[] }) {
             <TableHead>الإجمالي</TableHead>
             <TableHead>الدفع</TableHead>
             <TableHead className="text-right rtl:text-left">الحالة</TableHead>
+            <TableHead className="w-16"></TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
@@ -165,6 +181,16 @@ export function OrdersClient({ orders }: { orders: Order[] }) {
                       <option key={key} value={key}>{label}</option>
                     ))}
                   </select>
+                </TableCell>
+                <TableCell className="text-center">
+                  <button
+                    onClick={() => handleDeleteOrder(order.id)}
+                    disabled={updatingId === order.id}
+                    className="text-red-500 hover:text-red-700 disabled:opacity-50 transition-colors p-1 rounded hover:bg-red-50 dark:hover:bg-red-950/30"
+                    title="حذف نهائي"
+                  >
+                    <Trash2 className="w-5 h-5" />
+                  </button>
                 </TableCell>
               </TableRow>
             ))

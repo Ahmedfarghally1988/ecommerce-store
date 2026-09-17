@@ -162,6 +162,11 @@ function LoginContent() {
                 </button>
               </div>
               {errors.password && <p className="mt-1.5 text-xs font-medium text-red-500">{errors.password.message}</p>}
+              <div className="flex justify-end mt-2">
+                <Link href={`/${locale}/forgot-password`} className="text-xs text-blue-600 hover:text-blue-700 hover:underline">
+                  {isAr ? 'نسيت كلمة المرور؟' : 'Forgot Password?'}
+                </Link>
+              </div>
             </div>
 
             <button
