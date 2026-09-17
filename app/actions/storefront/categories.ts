@@ -8,8 +8,8 @@ export const getFeaturedCategories = unstable_cache(async () => {
   try {
     const categories = await prisma.category.findMany({
       where: { isActive: true },
-      take: 7,
-      orderBy: { sortOrder: "asc" }
+      orderBy: { sortOrder: "asc" },
+      take: 7
     });
     return categories;
   } catch (error) {

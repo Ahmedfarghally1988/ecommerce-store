@@ -12,7 +12,7 @@ const adminRoutes = ['/admin'];
 // Routes requiring Customer session (customer_session cookie, role === CUSTOMER, status === APPROVED)
 const customerRoutes = ['/account'];
 
-export async function middleware(request: NextRequest) {
+export default async function middleware(request: NextRequest) {
   const pathname = request.nextUrl.pathname;
 
   // ── 301/302 Redirects Guard ──────────────────────────────────────────────
