@@ -46,7 +46,8 @@ export async function resetPassword(email: string) {
     
     if (!emailResult.success) {
       console.error("Failed to send email", emailResult.error);
-      return { success: false, message: "حدث خطأ أثناء إرسال البريد الإلكتروني. يرجى مراجعة إعدادات الخادم (SMTP)" };
+      const errMessage = emailResult.error?.message ? ` (${emailResult.error.message})` : '';
+      return { success: false, message: `حدث خطأ أثناء إرسال البريد الإلكتروني${errMessage}` };
     }
 
     return { success: true, message: "إذا كان البريد مسجلاً لدينا، ستصلك رسالة بكلمة المرور الجديدة" };

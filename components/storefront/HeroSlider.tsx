@@ -75,7 +75,7 @@ export default function HeroSlider({ slides, locale }: HeroSliderProps) {
   }
 
   return (
-    <div className="relative w-full overflow-hidden rounded-md group select-none grid grid-cols-1 grid-rows-1 pt-6 md:pt-0">
+    <div className="relative w-full overflow-hidden rounded-md group select-none grid grid-cols-1 grid-rows-1 mt-6 md:mt-0">
       {/* Slides */}
       {slides.map((slide, index) => {
         const title = isRtl ? slide.titleAr : slide.titleEn;
@@ -94,7 +94,7 @@ export default function HeroSlider({ slides, locale }: HeroSliderProps) {
             }`}
           >
             {/* Background Image: Full Width & Natural Proportions */}
-            <div className="w-full h-[250px] sm:h-[300px] md:h-[400px]">
+            <div className="w-full h-[220px] sm:h-[300px] md:h-[400px]">
               {slide.mobileImage ? (
                 <>
                   <img
@@ -166,14 +166,14 @@ export default function HeroSlider({ slides, locale }: HeroSliderProps) {
           <button
             onClick={isRtl ? goNext : goPrev}
             aria-label="Previous slide"
-            className="absolute left-4 sm:left-8 top-1/2 -translate-y-1/2 z-10 w-11 h-11 sm:w-13 sm:h-13 rounded-full bg-black/30 hover:bg-black/70 backdrop-blur-md border border-white/20 text-white flex items-center justify-center transition-all duration-200 opacity-0 group-hover:opacity-100 hover:scale-110 active:scale-90"
+            className="absolute left-4 sm:left-8 top-1/2 -translate-y-1/2 z-10 w-11 h-11 sm:w-13 sm:h-13 rounded-full bg-black/30 hover:bg-black/70 backdrop-blur-md border border-white/20 text-white flex items-center justify-center transition-all duration-200 opacity-100 sm:opacity-0 sm:group-hover:opacity-100 hover:scale-110 active:scale-90"
           >
             <ChevronLeft className="w-6 h-6" />
           </button>
           <button
             onClick={isRtl ? goPrev : goNext}
             aria-label="Next slide"
-            className="absolute right-4 sm:right-8 top-1/2 -translate-y-1/2 z-10 w-11 h-11 sm:w-13 sm:h-13 rounded-full bg-black/30 hover:bg-black/70 backdrop-blur-md border border-white/20 text-white flex items-center justify-center transition-all duration-200 opacity-0 group-hover:opacity-100 hover:scale-110 active:scale-90"
+            className="absolute right-4 sm:right-8 top-1/2 -translate-y-1/2 z-10 w-11 h-11 sm:w-13 sm:h-13 rounded-full bg-black/30 hover:bg-black/70 backdrop-blur-md border border-white/20 text-white flex items-center justify-center transition-all duration-200 opacity-100 sm:opacity-0 sm:group-hover:opacity-100 hover:scale-110 active:scale-90"
           >
             <ChevronRight className="w-6 h-6" />
           </button>

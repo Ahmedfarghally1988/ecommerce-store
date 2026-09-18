@@ -73,19 +73,35 @@ export async function activateCustomer(id: string) {
   return JSON.parse(JSON.stringify(updated));
 }
 
-export async function updateCustomerAdmin(id: string, data: { name: string; email: string; phone: string; avatar: string }) {
+import bcrypt from 'bcryptjs';
+
+export async function updateCustomerAdmin(id: string, data: { name: string; email: string; phone: string; avatar: string; password?: string }) {
   await checkActionPermission('customers.approve'); // Or a specific edit permission
+  
+  const updateData: any = {
+    name: data.name,
+    email: data.email,
+    phone: data.phone || null,
+    avatar: data.avatar || null,
+  };
+
+  if (data.password && data.password.trim() !== '') {
+    updateData.password = await bcrypt.hash(data.password, 12);
+  }
+
   const updated = await prisma.user.update({
     where: { id },
-    data: {
-      name: data.name,
-      email: data.email,
-      phone: data.phone || null,
-      avatar: data.avatar || null,
-    },
+    data: updateData,
   });
   revalidatePath('/admin/customers');
   revalidatePath(`/admin/customers/${id}`);
   return JSON.parse(JSON.stringify(updated));
+}
+
+export async function deleteCustomer(id: string) {
+  await checkActionPermission('customers.delete');
+  const deleted = await prisma.user.delete({ where: { id } });
+  revalidatePath('/admin/customers');
+  return JSON.parse(JSON.stringify(deleted));
 }
 

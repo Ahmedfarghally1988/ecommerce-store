@@ -3,8 +3,8 @@
 import { useState, useTransition } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { approveCustomer, rejectCustomer, suspendCustomer, activateCustomer } from '@/app/actions/admin/customers';
-import { UserCheck, UserX, UserMinus, UserPlus, Search, Clock, CheckCircle, Ban, AlertCircle } from 'lucide-react';
+import { approveCustomer, rejectCustomer, suspendCustomer, activateCustomer, deleteCustomer } from '@/app/actions/admin/customers';
+import { UserCheck, UserX, UserMinus, UserPlus, Search, Clock, CheckCircle, Ban, AlertCircle, Trash2 } from 'lucide-react';
 
 interface Customer {
   id: string;
@@ -47,23 +47,33 @@ export default function CustomersClient({ initialCustomers, pendingCount }: Cust
     return matchesFilter && matchesSearch;
   });
 
-  const handleAction = async (id: string, action: 'approve' | 'reject' | 'suspend' | 'activate') => {
+  const handleAction = async (id: string, action: 'approve' | 'reject' | 'suspend' | 'activate' | 'delete') => {
+    if (action === 'delete') {
+      if (!window.confirm('هل أنت متأكد من حذف هذا العميل نهائياً؟ ستُحذف عناوينه وتقييماته للأبد، لكن سيتم الاحتفاظ بالطلبات السابقة كسجلات غير مرتبطة.')) {
+        return;
+      }
+    }
     setActionLoading(id + action);
     try {
       const actionFn = action === 'approve' ? approveCustomer
         : action === 'reject' ? rejectCustomer
         : action === 'suspend' ? suspendCustomer
-        : activateCustomer;
+        : action === 'activate' ? activateCustomer
+        : deleteCustomer;
 
       await actionFn(id);
 
-      setCustomers((prev) => prev.map((c) => {
-        if (c.id !== id) return c;
-        const newStatus = action === 'approve' || action === 'activate' ? 'APPROVED'
-          : action === 'reject' ? 'REJECTED'
-          : 'SUSPENDED';
-        return { ...c, customerStatus: newStatus as Customer['customerStatus'] };
-      }));
+      if (action === 'delete') {
+        setCustomers((prev) => prev.filter((c) => c.id !== id));
+      } else {
+        setCustomers((prev) => prev.map((c) => {
+          if (c.id !== id) return c;
+          const newStatus = action === 'approve' || action === 'activate' ? 'APPROVED'
+            : action === 'reject' ? 'REJECTED'
+            : 'SUSPENDED';
+          return { ...c, customerStatus: newStatus as Customer['customerStatus'] };
+        }));
+      }
     } catch (e) {
       console.error(e);
     } finally {
@@ -223,6 +233,13 @@ export default function CustomersClient({ initialCustomers, pendingCount }: Cust
                           <Link href={`/${locale}/admin/customers/${customer.id}`} className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg border text-xs font-medium transition-colors bg-gray-50 hover:bg-gray-100 text-gray-700 border-gray-200">
                             تعديل
                           </Link>
+                          <ActionButton
+                            onClick={() => handleAction(customer.id, 'delete')}
+                            loading={actionLoading === customer.id + 'delete'}
+                            color="red"
+                            icon={<Trash2 className="w-3.5 h-3.5" />}
+                            label="حذف"
+                          />
                         </div>
                       </td>
                     </tr>

@@ -92,6 +92,22 @@ export default async function middleware(request: NextRequest) {
     }
   }
 
+  // ── Auth Pages Guard ─────────────────────────────────────────────────────
+  const authRoutes = ['/login', '/register', '/forgot-password'];
+  const isAuthRoute = authRoutes.some(
+    (r) => pathWithoutLocale === r || pathWithoutLocale.startsWith(`${r}/`)
+  );
+
+  if (isAuthRoute) {
+    const customerCookie = request.cookies.get('customer_session');
+    const customerSession = customerCookie ? await decrypt(customerCookie.value) : null;
+
+    if (customerSession && customerSession.role === 'CUSTOMER' && customerSession.customerStatus === 'APPROVED') {
+      const homeUrl = new URL(`/${locale}`, request.url);
+      return NextResponse.redirect(homeUrl);
+    }
+  }
+
   // Pass to next-intl middleware for i18n handling
   return intlMiddleware(request);
 }

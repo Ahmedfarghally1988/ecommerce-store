@@ -163,7 +163,7 @@ export default function StorefrontHeader({ locale, customer, storeSettings = {},
   ];
 
   return (
-    <header className="top-0 z-50 w-full">
+    <header className="sticky -top-9 md:static md:top-auto z-50 w-full flex flex-col">
       {/* ── Top Bar ── */}
       <div className="bg-gray-900 text-gray-200 text-xs">
         <div className="container mx-auto px-4 h-9 flex items-center justify-between gap-2">
@@ -196,24 +196,24 @@ export default function StorefrontHeader({ locale, customer, storeSettings = {},
 
           {/* Right: social + language */}
           <div className="flex items-center gap-2 shrink-0">
-            {whatsappNumber && (
-              <a
-                href={`https://wa.me/${whatsappNumber.replace(/\D/g, '')}`}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="hover:text-green-400 transition-colors"
-                title="WhatsApp"
-              >
-                <MessageCircle className="w-3.5 h-3.5" />
-              </a>
-            )}
-            {customSocialLinks.map((link: any) => (
-              <a key={link.id} href={link.url} target="_blank" rel="noopener noreferrer" className="hover:text-blue-400 transition-colors" title={link.name}>
-                {getSocialIcon(link.name, link.url)}
-              </a>
-            ))}
-
-
+            <div className="hidden sm:flex items-center gap-2">
+              {whatsappNumber && (
+                <a
+                  href={`https://wa.me/${whatsappNumber.replace(/\D/g, '')}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="hover:text-green-400 transition-colors"
+                  title="WhatsApp"
+                >
+                  <MessageCircle className="w-3.5 h-3.5" />
+                </a>
+              )}
+              {customSocialLinks.map((link: any) => (
+                <a key={link.id} href={link.url} target="_blank" rel="noopener noreferrer" className="hover:text-blue-400 transition-colors" title={link.name}>
+                  {getSocialIcon(link.name, link.url)}
+                </a>
+              ))}
+            </div>
             {countries.length > 0 && (
               <CountrySelector countries={countries} currentCountryCode={currentCountryCode} locale={locale} />
             )}
@@ -248,7 +248,7 @@ export default function StorefrontHeader({ locale, customer, storeSettings = {},
 
             <Link href={`/${locale}`} className="flex items-center gap-2.5 shrink-0">
               {storeLogo ? (
-                <img src={storeLogo} alt={storeName} className="h-12 w-auto object-contain" />
+                <img src={storeLogo} alt={storeName} className="h-9 md:h-12 w-auto object-contain" />
               ) : (
                 <div className="flex items-center gap-1.5">
                   <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-blue-600 to-blue-800 flex items-center justify-center shadow">
@@ -286,7 +286,7 @@ export default function StorefrontHeader({ locale, customer, storeSettings = {},
 
             {/* Cart */}
             <Link href={`/${locale}/cart`} className="relative flex items-center text-sm gap-1 sm:gap-2 p-2 font-bold">
-              <ShoppingCart size={21} /> {locale === 'ar' ? 'السلة' : 'Cart'}
+              <ShoppingCart size={21} /> <span className="hidden md:inline">{locale === 'ar' ? 'السلة' : 'Cart'}</span>
               {isMounted && totalItems > 0 && (
                 <span className="absolute -top-0.5 -start-0.5 bg-blue-600 text-white text-[10px] font-bold h-4 min-w-4 px-0.5 rounded-full flex items-center justify-center leading-none">
                   {totalItems > 99 ? '99+' : totalItems}
@@ -296,7 +296,7 @@ export default function StorefrontHeader({ locale, customer, storeSettings = {},
 
             {/* User Menu */}
             {customer ? (
-              <div className="relative" ref={userMenuRef}>
+              <div className="relative hidden md:block" ref={userMenuRef}>
                 <button
                   onClick={() => setIsUserMenuOpen(!isUserMenuOpen)}
                   className="flex items-center gap-1.5 py-1.5 transition-colors text-sm font-medium text-gray-800"
@@ -493,21 +493,7 @@ export default function StorefrontHeader({ locale, customer, storeSettings = {},
               {isRtl ? <ChevronLeft className="w-4 h-4 text-gray-400" /> : <ChevronRight className="w-4 h-4 text-gray-400" />}
             </Link>
 
-            <Link
-              href={`/${locale}/products`}
-              onClick={() => setIsMobileMenuOpen(false)}
-              className={`flex items-center justify-between px-3.5 py-2.5 rounded-xl text-sm font-medium transition-colors ${
-                pathname.startsWith(`/${locale}/products`)
-                  ? 'bg-blue-50 text-blue-600 font-bold'
-                  : 'text-gray-700 hover:bg-gray-50'
-              }`}
-            >
-              <div className="flex items-center gap-3">
-                <Package className="w-4 h-4 text-blue-600" />
-                <span>{locale === 'ar' ? 'كافة المنتجات' : 'All Products'}</span>
-              </div>
-              {isRtl ? <ChevronLeft className="w-4 h-4 text-gray-400" /> : <ChevronRight className="w-4 h-4 text-gray-400" />}
-            </Link>
+
           </div>
 
           {/* Categories Section */}

@@ -22,6 +22,7 @@ export default function CustomerEditClient({ customer }: { customer: Customer })
     email: customer.email,
     phone: customer.phone || '',
     avatar: customer.avatar || '',
+    password: '',
   });
   const [uploading, setUploading] = useState(false);
   const [uploadError, setUploadError] = useState('');
@@ -108,6 +109,18 @@ export default function CustomerEditClient({ customer }: { customer: Customer })
               onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
               className="w-full px-4 py-2 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none"
             />
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">كلمة المرور الجديدة (اختياري)</label>
+            <input
+              type="text"
+              value={formData.password || ''}
+              onChange={(e) => setFormData({ ...formData, password: e.target.value })}
+              placeholder="اتركه فارغاً إذا لم ترغب في تغييره"
+              className="w-full px-4 py-2 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none"
+            />
+            <p className="text-xs text-gray-500 mt-1">اكتب كلمة مرور جديدة هنا لتغيير كلمة مرور العميل.</p>
           </div>
 
           <div>

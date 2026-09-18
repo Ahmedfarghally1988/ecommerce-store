@@ -92,6 +92,7 @@ model User {
   role           Role           @default(CUSTOMER)
   status         Boolean        @default(true)
   customerStatus CustomerStatus @default(PENDING)
+  isEmailVerified Boolean       @default(false)
   createdAt      DateTime       @default(now())
   updatedAt      DateTime       @updatedAt
 
@@ -100,6 +101,16 @@ model User {
   reviews   Review[]
   wishlist  Wishlist[]
   cart      Cart?
+}
+
+model OtpCode {
+  id        String   @id @default(cuid())
+  email     String
+  code      String
+  expiresAt DateTime
+  createdAt DateTime @default(now())
+
+  @@index([email])
 }
 
 model Currency {

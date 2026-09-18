@@ -1,14 +1,15 @@
 import { NextResponse } from 'next/server';
 import { writeFile, mkdir } from 'fs/promises';
 import path from 'path';
-import { getCustomerSession, getAdminSession } from '@/lib/auth';
+import { getAdminSession, getCustomerSession } from '@/lib/auth';
+import sharp from 'sharp';
 
 export async function POST(req: Request) {
   try {
-    const customerSession = await getCustomerSession();
     const adminSession = await getAdminSession();
-
-    if (!customerSession && !adminSession) {
+    const customerSession = await getCustomerSession();
+    
+    if (!adminSession && !customerSession) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
@@ -31,11 +32,20 @@ export async function POST(req: Request) {
     const uploadDir = path.join(process.cwd(), 'public', 'uploads', 'avatars');
     await mkdir(uploadDir, { recursive: true });
 
-    const safeName = file.name.replace(/[^a-zA-Z0-9.-]/g, '_');
-    const filename = `${Date.now()}-${safeName}`;
+    let safeName = file.name.replace(/[^a-zA-Z0-9.-]/g, '_');
+    const lastDotIndex = safeName.lastIndexOf('.');
+    if (lastDotIndex > 0) {
+      safeName = safeName.substring(0, lastDotIndex);
+    }
+    const filename = `${Date.now()}-${safeName}.webp`;
     const filePath = path.join(uploadDir, filename);
 
-    await writeFile(filePath, buffer);
+    // Convert to webp using sharp
+    const processedBuffer = await sharp(buffer)
+      .webp({ quality: 80 })
+      .toBuffer();
+
+    await writeFile(filePath, processedBuffer);
 
     const publicUrl = `/uploads/avatars/${filename}`;
     return NextResponse.json({ url: publicUrl }, { status: 200 });

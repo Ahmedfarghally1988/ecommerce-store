@@ -191,7 +191,7 @@ function LoginContent() {
           <div className="mt-8 pt-6 border-t border-slate-100 dark:border-slate-800 text-center">
             <p className="text-sm text-slate-500 dark:text-slate-400">
               {isAr ? 'ليس لديك حساب؟' : "Don't have an account?"}{' '}
-              <Link href={`/${locale}/register`} className="text-blue-600 dark:text-blue-400 hover:text-blue-700 font-semibold hover:underline transition-colors">
+              <Link href={`/${locale}/register${searchParams.get('callbackUrl') ? `?callbackUrl=${encodeURIComponent(searchParams.get('callbackUrl') as string)}` : ''}`} className="text-blue-600 dark:text-blue-400 hover:text-blue-700 font-semibold hover:underline transition-colors">
                 {isAr ? 'سجّل الآن' : 'Register'}
               </Link>
             </p>

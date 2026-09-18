@@ -2,8 +2,12 @@ import { NextResponse } from 'next/server';
 import prisma from '@/lib/prisma';
 import bcrypt from 'bcryptjs';
 import { registerSchema } from '@/lib/validations/auth';
+import { sendOTP } from '@/lib/email';
 
-
+// Generate a 6 digit OTP
+function generateOTP() {
+  return Math.floor(100000 + Math.random() * 900000).toString();
+}
 
 export async function POST(request: Request) {
   try {
@@ -16,41 +20,72 @@ export async function POST(request: Request) {
     });
 
     if (existingUser) {
-      return NextResponse.json(
-        { error: 'An account with this email already exists.' },
-        { status: 409 }
-      );
+      if (existingUser.isEmailVerified) {
+        return NextResponse.json(
+          { error: 'An account with this email already exists and is verified.' },
+          { status: 409 }
+        );
+      }
+      
+      // User exists but not verified. Update password just in case they typed a new one.
+      const hashedPassword = await bcrypt.hash(validatedData.password, 12);
+      await prisma.user.update({
+        where: { id: existingUser.id },
+        data: {
+          password: hashedPassword,
+          name: validatedData.name,
+          phone: validatedData.phone || null,
+        }
+      });
+    } else {
+      const hashedPassword = await bcrypt.hash(validatedData.password, 12);
+
+      await prisma.user.create({
+        data: {
+          name: validatedData.name,
+          email: validatedData.email,
+          phone: validatedData.phone || null,
+          password: hashedPassword,
+          role: 'CUSTOMER',
+          customerStatus: 'PENDING',
+          status: true,
+          isEmailVerified: false,
+        },
+      });
     }
 
-    const hashedPassword = await bcrypt.hash(validatedData.password, 12);
+    // Generate and save OTP
+    const code = generateOTP();
+    const expiresAt = new Date(Date.now() + 10 * 60 * 1000); // 10 minutes
 
-    const user = await prisma.user.create({
-      data: {
-        name: validatedData.name,
-        email: validatedData.email,
-        phone: validatedData.phone || null,
-        password: hashedPassword,
-        role: 'CUSTOMER',
-        customerStatus: 'PENDING',
-        status: true,
-      },
+    // Delete any old OTPs for this email to prevent spam
+    await prisma.otpCode.deleteMany({
+      where: { email: validatedData.email }
     });
 
-    // Create notification for admin
-    await prisma.notification.create({
+    await prisma.otpCode.create({
       data: {
-        type: 'NEW_CUSTOMER',
-        title: 'عميل جديد',
-        message: `قام ${user.name} (${user.email}) بالتسجيل وينتظر الموافقة`,
-        link: '/admin/customers',
-      },
-    }).catch(() => {}); // Don't fail registration if notification fails
+        email: validatedData.email,
+        code,
+        expiresAt,
+      }
+    });
 
+    // Send OTP email via Resend
+    const sent = await sendOTP(validatedData.email, code);
+    
+    if (!sent) {
+       console.error("Failed to send OTP to:", validatedData.email);
+       // We still return success but maybe warn in logs
+    }
+
+    // Return requiresVerification instead of final success
     return NextResponse.json({
       success: true,
-      message: 'Account created successfully. Please wait for admin approval before logging in.',
-      user: { id: user.id, name: user.name, email: user.email },
-    }, { status: 201 });
+      requiresVerification: true,
+      email: validatedData.email,
+      message: 'OTP sent successfully. Please check your email.',
+    }, { status: 200 });
   } catch (error: any) {
     if (error.name === 'ZodError') {
       return NextResponse.json({ error: error.errors[0].message }, { status: 400 });

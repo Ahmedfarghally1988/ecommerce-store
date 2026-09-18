@@ -54,12 +54,12 @@ export default async function StorefrontHomepage({ params }: { params: Promise<{
       {/* Featured Categories */}
       {featuredCategories.length > 0 && (
         <div className="container mx-auto px-4">
-          <section className="py-8 md:py-10 px-4 md:px-8 bg-gray-50 rounded-md my-8">
-          <div className="flex items-center justify-between mb-8">
+          <section className="md:py-10 md:px-8 md:bg-gray-50 md:rounded-md my-6 md:my-8">
+          <div className="flex items-center justify-between mb-6 md:mb-8">
             <h2 className="text-2xl font-bold">{t('featuredCategories')}</h2>
             <Link 
               href={`/${locale}/category`} 
-              className="flex items-center gap-2 px-4 py-2 bg-gray-100 hover:bg-gray-200 text-gray-800 text-sm font-semibold rounded-full transition-colors"
+              className="hidden md:flex items-center gap-2 px-4 py-2 bg-gray-100 hover:bg-gray-200 text-gray-800 text-sm font-semibold rounded-full transition-colors"
             >
               {t('viewAll')}
               {locale === 'ar' ? <ArrowLeft className="w-4 h-4" /> : <ArrowRight className="w-4 h-4" />}
@@ -83,6 +83,21 @@ export default async function StorefrontHomepage({ params }: { params: Promise<{
                 </Link>
               );
             })}
+            
+            {/* Extra block for mobile to fill the empty space */}
+            <Link 
+              href={`/${locale}/category`} 
+              className="flex md:hidden flex-col items-center text-center space-y-2 group"
+            >
+              <div className="w-full aspect-square rounded-md overflow-hidden bg-orange-500 text-white flex items-center justify-center border border-orange-400 shadow-sm group-hover:bg-orange-600 transition-colors">
+                <div className="flex flex-col items-center justify-center">
+                  <span className="font-bold text-lg mb-2">{locale === 'ar' ? 'تسوق الآن' : 'Shop Now'}</span>
+                  {locale === 'ar' ? <ArrowLeft className="w-6 h-6" /> : <ArrowRight className="w-6 h-6" />}
+                </div>
+              </div>
+              {/* Invisible spacer to match height of other category text */}
+              <span className="font-medium text-transparent select-none" aria-hidden="true">_</span>
+            </Link>
           </div>
         </section>
         </div>
@@ -96,8 +111,10 @@ export default async function StorefrontHomepage({ params }: { params: Promise<{
             <p className="text-gray-500 mt-2">{t('featuredProductsDesc')}</p>
           </div>
           <ProductGrid>
-            {featuredProducts.map((product: any) => (
-              <ProductCard key={product.id} product={product} locale={locale} />
+            {featuredProducts.slice(0, 6).map((product: any, index: number) => (
+              <div key={product.id} className={`h-full ${index === 5 ? 'block lg:hidden' : 'block'}`}>
+                <ProductCard product={product} locale={locale} />
+              </div>
             ))}
           </ProductGrid>
         </section>
@@ -117,8 +134,10 @@ export default async function StorefrontHomepage({ params }: { params: Promise<{
             <p className="text-gray-500 mt-2">{t('latestProductsDesc')}</p>
           </div>
           <ProductGrid>
-            {latestProducts.map((product: any) => (
-              <ProductCard key={product.id} product={product} locale={locale} />
+            {latestProducts.slice(0, 6).map((product: any, index: number) => (
+              <div key={product.id} className={`h-full ${index === 5 ? 'block lg:hidden' : 'block'}`}>
+                <ProductCard product={product} locale={locale} />
+              </div>
             ))}
           </ProductGrid>
         </section>
