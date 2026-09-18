@@ -46,7 +46,8 @@ export async function resetPassword(email: string) {
     
     if (!emailResult.success) {
       console.error("Failed to send email", emailResult.error);
-      const errMessage = emailResult.error?.message ? ` (${emailResult.error.message})` : '';
+      const err = emailResult.error as any;
+      const errMessage = err?.message ? ` (${err.message})` : '';
       return { success: false, message: `حدث خطأ أثناء إرسال البريد الإلكتروني${errMessage}` };
     }
 
