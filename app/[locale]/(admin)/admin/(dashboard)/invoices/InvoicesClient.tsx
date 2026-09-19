@@ -33,6 +33,7 @@ export function InvoicesClient({ initialInvoices, currentFilters }: { initialInv
     if (month) params.set('month', month);
     
     router.push(`${pathname}?${params.toString()}`);
+    router.refresh();
   };
 
   const clearFilters = () => {
@@ -41,6 +42,7 @@ export function InvoicesClient({ initialInvoices, currentFilters }: { initialInv
     setDateTo('');
     setMonth('');
     router.push(pathname);
+    router.refresh();
   };
 
   const handleDelete = async () => {

@@ -21,8 +21,11 @@ export default async function InvoicesPage({
     invoiceNumber: resolvedParams.invoiceNumber as string | undefined,
   };
 
+  console.log("FILTERS APPLIED ON SERVER:", filters);
+
   const response = await getInvoices(filters);
   const invoices = response.success ? response.data : [];
+  const safeInvoices = JSON.parse(JSON.stringify(invoices));
 
-  return <InvoicesClient initialInvoices={invoices || []} currentFilters={filters} />;
+  return <InvoicesClient initialInvoices={safeInvoices} currentFilters={filters} />;
 }
