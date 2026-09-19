@@ -19,9 +19,10 @@ interface AdminHeaderProps {
   adminName?: string;
   adminEmail?: string;
   adminAvatar?: string | null;
+  onMenuClick?: () => void;
 }
 
-export function AdminHeader({ adminName, adminEmail, adminAvatar }: AdminHeaderProps) {
+export function AdminHeader({ adminName, adminEmail, adminAvatar, onMenuClick }: AdminHeaderProps) {
   const router = useRouter();
   const [notifications, setNotifications] = useState<Notification[]>([]);
   const [unreadCount, setUnreadCount] = useState(0);
@@ -111,7 +112,7 @@ export function AdminHeader({ adminName, adminEmail, adminAvatar }: AdminHeaderP
   return (
     <header className="flex h-16 shrink-0 items-center justify-between border-b border-gray-200 border-gray-200 bg-white px-6 dark:border-gray-800 dark:bg-gray-950">
       <div className="flex items-center gap-4">
-        <Button variant="ghost" size="icon" className="md:hidden">
+        <Button variant="ghost" size="icon" className="md:hidden" onClick={onMenuClick}>
           <Menu className="h-5 w-5" />
         </Button>
       </div>

@@ -286,13 +286,25 @@ export default async function AdminDashboardPage(props: {
       )}
 
       {/* Pie Charts Reports */}
-      <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3 mt-8">
-        <PieChartWidget title="أكثر المنتجات مبيعاً" data={topProductsData} currency={currency} isCurrency={true} />
-        <PieChartWidget title="الأقسام الأكثر مبيعاً" data={topCategoriesData} currency={currency} isCurrency={true} />
-        <PieChartWidget title="الماركات الأكثر مبيعاً" data={topBrandsData} currency={currency} isCurrency={true} />
-        <PieChartWidget title="أكثر المدن مبيعاً" data={topCitiesData} currency={currency} isCurrency={true} />
-        <PieChartWidget title="توزيع التقييمات" data={reviewsData} isCurrency={false} />
-        <PieChartWidget title="أكثر الكوبونات استخداماً" data={topCouponsData} isCurrency={false} />
+      <div className="flex overflow-x-auto pb-4 snap-x snap-mandatory gap-4 md:grid md:grid-cols-2 lg:grid-cols-3 md:gap-6 md:overflow-visible md:pb-0 md:snap-none mt-8 custom-scrollbar">
+        <div className="min-w-[85vw] sm:min-w-0 shrink-0 md:shrink md:w-auto snap-center">
+          <PieChartWidget title="أكثر المنتجات مبيعاً" data={topProductsData} currency={currency} isCurrency={true} />
+        </div>
+        <div className="min-w-[85vw] sm:min-w-0 shrink-0 md:shrink md:w-auto snap-center">
+          <PieChartWidget title="الأقسام الأكثر مبيعاً" data={topCategoriesData} currency={currency} isCurrency={true} />
+        </div>
+        <div className="min-w-[85vw] sm:min-w-0 shrink-0 md:shrink md:w-auto snap-center">
+          <PieChartWidget title="الماركات الأكثر مبيعاً" data={topBrandsData} currency={currency} isCurrency={true} />
+        </div>
+        <div className="min-w-[85vw] sm:min-w-0 shrink-0 md:shrink md:w-auto snap-center">
+          <PieChartWidget title="أكثر المدن مبيعاً" data={topCitiesData} currency={currency} isCurrency={true} />
+        </div>
+        <div className="min-w-[85vw] sm:min-w-0 shrink-0 md:shrink md:w-auto snap-center">
+          <PieChartWidget title="توزيع التقييمات" data={reviewsData} isCurrency={false} />
+        </div>
+        <div className="min-w-[85vw] sm:min-w-0 shrink-0 md:shrink md:w-auto snap-center">
+          <PieChartWidget title="أكثر الكوبونات استخداماً" data={topCouponsData} isCurrency={false} />
+        </div>
       </div>
 
       {/* Reports / Tables */}

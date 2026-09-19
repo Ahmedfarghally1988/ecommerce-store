@@ -1,6 +1,5 @@
 import { ReactNode } from 'react';
-import { AdminSidebar } from '@/components/admin/layout/AdminSidebar';
-import { AdminHeader } from '@/components/admin/layout/AdminHeader';
+import { AdminLayoutClient } from '@/components/admin/layout/AdminLayoutClient';
 import prisma from '@/lib/prisma';
 import { getAdminSession } from '@/lib/auth';
 
@@ -56,23 +55,15 @@ export default async function AdminLayout({
   }
 
   return (
-    <div className="flex h-screen overflow-hidden bg-gray-50 dark:bg-gray-900">
-      {/* Sidebar for desktop */}
-      <div className="hidden md:flex md:flex-shrink-0">
-        <AdminSidebar
-          pendingCustomers={pendingCustomers}
-          adminPermissions={adminPermissions}
-          adminRole={adminRole}
-        />
-      </div>
-
-      <div className="flex flex-1 flex-col overflow-hidden w-full">
-        <AdminHeader adminName={adminName} adminEmail={adminEmail} adminAvatar={adminAvatar} />
-        
-        <main className="flex-1 overflow-y-auto p-4 md:p-6 lg:p-8">
-          {children}
-        </main>
-      </div>
-    </div>
+    <AdminLayoutClient
+      pendingCustomers={pendingCustomers}
+      adminPermissions={adminPermissions}
+      adminRole={adminRole}
+      adminName={adminName}
+      adminEmail={adminEmail}
+      adminAvatar={adminAvatar}
+    >
+      {children}
+    </AdminLayoutClient>
   );
 }

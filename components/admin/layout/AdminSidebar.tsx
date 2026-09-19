@@ -63,6 +63,7 @@ interface AdminSidebarProps {
   pendingCustomers?: number;
   adminPermissions?: string[];  // list of permissions, or ['*'] for SUPER_ADMIN
   adminRole?: string;
+  onMobileClose?: () => void;
 }
 
 function canSee(permission: string | undefined, adminPermissions: string[]): boolean {
@@ -75,6 +76,7 @@ export function AdminSidebar({
   pendingCustomers = 0,
   adminPermissions = [],
   adminRole = '',
+  onMobileClose,
 }: AdminSidebarProps) {
   const pathname = usePathname();
   const router = useRouter();
@@ -97,7 +99,7 @@ export function AdminSidebar({
         {!isCollapsed && <span className="text-lg font-bold px-2">لوحة التحكم</span>}
         <button 
           onClick={() => setIsCollapsed(!isCollapsed)} 
-          className="p-2 rounded-md hover:bg-gray-800 text-gray-400 hover:text-white transition-colors"
+          className="hidden md:block p-2 rounded-md hover:bg-gray-800 text-gray-400 hover:text-white transition-colors"
           title={isCollapsed ? "توسيع" : "طي القائمة"}
         >
           <Menu className="w-5 h-5" />
@@ -133,6 +135,7 @@ export function AdminSidebar({
             <Link
               key={item.name}
               href={itemPath}
+              onClick={onMobileClose}
               title={isCollapsed ? item.name : undefined}
               className={`group flex items-center rounded-md py-2 transition-colors ${
                 isCollapsed ? 'justify-center px-0' : 'px-3'
