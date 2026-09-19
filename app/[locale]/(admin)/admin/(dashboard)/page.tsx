@@ -221,50 +221,62 @@ export default async function AdminDashboardPage(props: {
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
         <div className="rounded-xl border border-gray-200 bg-white p-6 shadow-sm dark:border-gray-800 dark:bg-gray-950">
           <div className="flex items-center justify-between">
-            <h3 className="text-sm font-medium text-gray-500 dark:text-gray-400">إجمالي المبيعات</h3>
-            <DollarSign className="h-5 w-5 text-green-500" />
+            <div>
+              <h3 className="text-sm font-medium text-gray-500 dark:text-gray-400">إجمالي المبيعات</h3>
+              <p className="mt-2 text-3xl font-bold text-gray-900 dark:text-gray-50">{formatPrice(totalRevenue, currency)}</p>
+            </div>
+            <DollarSign className="h-12 w-12 text-gray-300 dark:text-gray-700" strokeWidth={1.5} />
           </div>
-          <p className="mt-2 text-3xl font-bold text-gray-900 dark:text-gray-50">{formatPrice(totalRevenue, currency)}</p>
         </div>
         
         <div className="rounded-xl border border-gray-200 bg-white p-6 shadow-sm dark:border-gray-800 dark:bg-gray-950">
           <div className="flex items-center justify-between">
-            <h3 className="text-sm font-medium text-gray-500 dark:text-gray-400">الطلبات</h3>
-            <Package className="h-5 w-5 text-blue-500" />
+            <div>
+              <h3 className="text-sm font-medium text-gray-500 dark:text-gray-400">الطلبات</h3>
+              <p className="mt-2 text-3xl font-bold text-gray-900 dark:text-gray-50">{ordersCount}</p>
+            </div>
+            <Package className="h-12 w-12 text-gray-300 dark:text-gray-700" strokeWidth={1.5} />
           </div>
-          <p className="mt-2 text-3xl font-bold text-gray-900 dark:text-gray-50">{ordersCount}</p>
         </div>
 
         <div className="rounded-xl border border-gray-200 bg-white p-6 shadow-sm dark:border-gray-800 dark:bg-gray-950">
           <div className="flex items-center justify-between">
-            <h3 className="text-sm font-medium text-gray-500 dark:text-gray-400">المنتجات</h3>
-            <Tags className="h-5 w-5 text-purple-500" />
+            <div>
+              <h3 className="text-sm font-medium text-gray-500 dark:text-gray-400">المنتجات</h3>
+              <p className="mt-2 text-3xl font-bold text-gray-900 dark:text-gray-50">{productsCount}</p>
+            </div>
+            <Tags className="h-12 w-12 text-gray-300 dark:text-gray-700" strokeWidth={1.5} />
           </div>
-          <p className="mt-2 text-3xl font-bold text-gray-900 dark:text-gray-50">{productsCount}</p>
         </div>
 
         <div className="rounded-xl border border-gray-200 bg-white p-6 shadow-sm dark:border-gray-800 dark:bg-gray-950">
           <div className="flex items-center justify-between">
-            <h3 className="text-sm font-medium text-gray-500 dark:text-gray-400">العملاء</h3>
-            <Users className="h-5 w-5 text-orange-500" />
+            <div>
+              <h3 className="text-sm font-medium text-gray-500 dark:text-gray-400">العملاء</h3>
+              <p className="mt-2 text-3xl font-bold text-gray-900 dark:text-gray-50">{customersCount}</p>
+            </div>
+            <Users className="h-12 w-12 text-gray-300 dark:text-gray-700" strokeWidth={1.5} />
           </div>
-          <p className="mt-2 text-3xl font-bold text-gray-900 dark:text-gray-50">{customersCount}</p>
         </div>
 
         <div className="rounded-xl border border-gray-200 bg-white p-6 shadow-sm dark:border-gray-800 dark:bg-gray-950">
           <div className="flex items-center justify-between">
-            <h3 className="text-sm font-medium text-gray-500 dark:text-gray-400">المستخدمين</h3>
-            <UserCircle className="h-5 w-5 text-indigo-500" />
+            <div>
+              <h3 className="text-sm font-medium text-gray-500 dark:text-gray-400">المستخدمين</h3>
+              <p className="mt-2 text-3xl font-bold text-gray-900 dark:text-gray-50">{usersCount}</p>
+            </div>
+            <UserCircle className="h-12 w-12 text-gray-300 dark:text-gray-700" strokeWidth={1.5} />
           </div>
-          <p className="mt-2 text-3xl font-bold text-gray-900 dark:text-gray-50">{usersCount}</p>
         </div>
         
         <div className="rounded-xl border border-gray-200 bg-white p-6 shadow-sm dark:border-gray-800 dark:bg-gray-950">
           <div className="flex items-center justify-between">
-            <h3 className="text-sm font-medium text-gray-500 dark:text-gray-400">الزوار</h3>
-            <Eye className="h-5 w-5 text-cyan-500" />
+            <div>
+              <h3 className="text-sm font-medium text-gray-500 dark:text-gray-400">الزوار</h3>
+              <p className="mt-2 text-3xl font-bold text-gray-900 dark:text-gray-50">{visitorsCount}</p>
+            </div>
+            <Eye className="h-12 w-12 text-gray-300 dark:text-gray-700" strokeWidth={1.5} />
           </div>
-          <p className="mt-2 text-3xl font-bold text-gray-900 dark:text-gray-50">{visitorsCount}</p>
         </div>
       </div>
 

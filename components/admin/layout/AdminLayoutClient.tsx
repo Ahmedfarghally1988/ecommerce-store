@@ -26,9 +26,9 @@ export function AdminLayoutClient({
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   return (
-    <div className="flex h-dvh overflow-hidden bg-gray-50 dark:bg-gray-900">
+    <div className="flex h-dvh overflow-hidden bg-gray-50 dark:bg-gray-900 print:h-auto print:overflow-visible print:bg-white print:block">
       {/* Sidebar for desktop */}
-      <div className="hidden md:flex md:flex-shrink-0">
+      <div className="hidden md:flex md:flex-shrink-0 print:hidden">
         <AdminSidebar
           pendingCustomers={pendingCustomers}
           adminPermissions={adminPermissions}
@@ -68,15 +68,17 @@ export function AdminLayoutClient({
         </div>
       )}
 
-      <div className="flex flex-1 flex-col overflow-hidden w-full">
-        <AdminHeader 
-          adminName={adminName} 
-          adminEmail={adminEmail} 
-          adminAvatar={adminAvatar} 
-          onMenuClick={() => setMobileMenuOpen(true)}
-        />
+      <div className="flex flex-1 flex-col overflow-hidden w-full print:overflow-visible print:block">
+        <div className="print:hidden">
+          <AdminHeader 
+            adminName={adminName} 
+            adminEmail={adminEmail} 
+            adminAvatar={adminAvatar} 
+            onMenuClick={() => setMobileMenuOpen(true)}
+          />
+        </div>
         
-        <main className="flex-1 overflow-y-auto p-4 md:p-6 lg:p-8 relative">
+        <main className="flex-1 overflow-y-auto p-4 md:p-6 lg:p-8 relative print:overflow-visible print:p-0">
           {children}
         </main>
       </div>

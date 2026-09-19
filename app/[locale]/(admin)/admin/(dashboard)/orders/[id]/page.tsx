@@ -17,6 +17,7 @@ export default async function OrderDetailsPage({
     where: { id: resolvedParams.id },
     include: {
       items: true,
+      invoices: true,
       user: {
         select: { id: true, name: true, email: true },
       },

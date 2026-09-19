@@ -45,6 +45,7 @@ const navigation: NavItem[] = [
   { name: 'الأقسام',         href: '/admin/categories',   icon: Tags,            permission: 'categories.view' },
   { name: 'الماركات',        href: '/admin/brands',       icon: Building2,       permission: 'brands.view' },
   { name: 'الطلبات',         href: '/admin/orders',       icon: ShoppingCart,    permission: 'orders.view' },
+  { name: 'الفواتير',        href: '/admin/invoices',     icon: FileText,        permission: 'orders.view' },
   { name: 'العملاء',         href: '/admin/customers',    icon: Users,           permission: 'customers.view', hasPending: true },
   { name: 'الكوبونات',       href: '/admin/coupons',      icon: Ticket,          permission: 'coupons.view' },
   { name: 'التقييمات',       href: '/admin/reviews',      icon: MessageSquare,   permission: 'reviews.view' },

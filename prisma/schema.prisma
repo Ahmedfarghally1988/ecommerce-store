@@ -324,6 +324,7 @@ model Order {
   updatedAt        DateTime      @updatedAt
 
   items            OrderItem[]
+  invoices         Invoice[]
 }
 
 model OrderItem {
@@ -460,3 +461,18 @@ model ContactMessage {
   createdAt DateTime @default(now())
 }
 
+model Invoice {
+  id              String   @id @default(cuid())
+  invoiceNumber   String   @unique
+  orderId         String
+  order           Order    @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  amount          Decimal  @db.Decimal(10, 2)
+  currency        String   @default("EGP")
+  
+  customerName    String?
+  customerEmail   String?
+  customerPhone   String?
+  
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+}

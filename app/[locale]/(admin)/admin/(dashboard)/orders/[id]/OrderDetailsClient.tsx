@@ -4,14 +4,15 @@ import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { Order, OrderItem, OrderStatus, PaymentStatus } from '@prisma/client';
-import { ArrowRight, User, MapPin, Package, CreditCard, Calendar, Phone, Mail, Edit3 } from 'lucide-react';
+import { ArrowRight, User, MapPin, Package, CreditCard, Calendar, Phone, Mail, Edit3, FileText } from 'lucide-react';
 import { updateOrderStatus, updatePaymentStatus, adminUpdateOrderAddress } from '@/app/actions/admin/orders';
+import { createInvoice } from '@/app/actions/admin/invoices';
 import { getShippingSettings } from '@/app/actions/storefront/orders';
 import { useToast } from '@/components/shared/ui/Toast';
 import { formatPrice } from '@/lib/format';
 import { Modal } from '@/components/shared/ui/Modal';
 
-type OrderWithItems = Order & { items: OrderItem[] };
+type OrderWithItems = Order & { items: OrderItem[], invoices: any[] };
 
 export function OrderDetailsClient({ order }: { order: OrderWithItems }) {
   const pathname = usePathname();
@@ -34,6 +35,9 @@ export function OrderDetailsClient({ order }: { order: OrderWithItems }) {
     area: address?.area || '' 
   });
   const [shippingSettings, setShippingSettings] = useState<{baseCost: number, freeThreshold: number | null, regions: any[]}>({ baseCost: 0, freeThreshold: null, regions: [] });
+
+  const [isInvoiceModalOpen, setIsInvoiceModalOpen] = useState(false);
+  const [creatingInvoice, setCreatingInvoice] = useState(false);
 
   useEffect(() => {
     getShippingSettings().then(setShippingSettings);
@@ -99,6 +103,23 @@ export function OrderDetailsClient({ order }: { order: OrderWithItems }) {
       showToast('فشل تحديث العنوان', 'error');
     } finally {
       setUpdating(false);
+    }
+  };
+
+  const handleCreateInvoice = async () => {
+    setCreatingInvoice(true);
+    try {
+      const res = await createInvoice(order.id);
+      if (res?.success) {
+        showToast('تم إنشاء الفاتورة بنجاح', 'success');
+        setIsInvoiceModalOpen(false);
+      } else {
+        showToast(res?.error || 'فشل إنشاء الفاتورة', 'error');
+      }
+    } catch (e) {
+      showToast('فشل إنشاء الفاتورة', 'error');
+    } finally {
+      setCreatingInvoice(false);
     }
   };
 
@@ -305,6 +326,37 @@ export function OrderDetailsClient({ order }: { order: OrderWithItems }) {
         </div>
       </div>
 
+      {/* Invoice Actions */}
+      <div className="bg-white dark:bg-gray-800 rounded-2xl border border-gray-100 dark:border-gray-700 p-6 flex items-center justify-between mt-6">
+        <div>
+          <h2 className="text-lg font-bold text-gray-900 dark:text-gray-100 flex items-center gap-2">
+            <FileText className="w-5 h-5 text-indigo-500" />
+            الفواتير
+          </h2>
+          <p className="text-sm text-gray-500 mt-1">
+            {order.invoices && order.invoices.length > 0 
+              ? `يوجد ${order.invoices.length} فاتورة لهذا الطلب` 
+              : 'لم يتم إنشاء أي فاتورة لهذا الطلب بعد.'}
+          </p>
+        </div>
+        <div className="flex items-center gap-3">
+          {order.invoices && order.invoices.length > 0 && (
+            <Link 
+              href={`/${locale}/admin/invoices/${order.invoices[order.invoices.length - 1].id}`}
+              className="px-4 py-2 bg-indigo-50 text-indigo-700 dark:bg-indigo-900/30 dark:text-indigo-400 font-medium rounded-lg hover:bg-indigo-100 dark:hover:bg-indigo-900/50 transition-colors flex items-center gap-2"
+            >
+              عرض الفاتورة
+            </Link>
+          )}
+          <button 
+            onClick={() => setIsInvoiceModalOpen(true)}
+            className="px-4 py-2 bg-indigo-600 text-white font-medium rounded-lg hover:bg-indigo-700 transition-colors flex items-center gap-2"
+          >
+            إنشاء فاتورة
+          </button>
+        </div>
+      </div>
+
       {/* Edit Address Modal */}
       <Modal
         isOpen={isEditingAddress}
@@ -349,6 +401,39 @@ export function OrderDetailsClient({ order }: { order: OrderWithItems }) {
             </button>
           </div>
         </form>
+      </Modal>
+
+      {/* Create Invoice Confirmation Modal */}
+      <Modal
+        isOpen={isInvoiceModalOpen}
+        onClose={() => !creatingInvoice && setIsInvoiceModalOpen(false)}
+        title="تأكيد إنشاء الفاتورة"
+        maxWidth="max-w-md"
+      >
+        <div className="p-4 space-y-4">
+          <p className="text-gray-700 dark:text-gray-300">
+            هل تريد بالتأكيد إنشاء فاتورة لهذا الطلب؟
+          </p>
+          <div className="flex justify-end gap-3 pt-4 border-t border-gray-100 dark:border-gray-700">
+            <button 
+              type="button" 
+              onClick={() => setIsInvoiceModalOpen(false)} 
+              disabled={creatingInvoice}
+              className="px-5 py-2.5 bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors font-medium"
+            >
+              إلغاء
+            </button>
+            <button 
+              type="button" 
+              onClick={handleCreateInvoice}
+              disabled={creatingInvoice}
+              className="px-5 py-2.5 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors font-medium flex items-center gap-2"
+            >
+              {creatingInvoice ? <svg className="w-4 h-4 animate-spin" fill="none" viewBox="0 0 24 24"><circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"/><path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"/></svg> : null}
+              موافق
+            </button>
+          </div>
+        </div>
       </Modal>
     </div>
   );
