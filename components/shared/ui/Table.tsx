@@ -2,12 +2,14 @@ import React, { HTMLAttributes, TdHTMLAttributes, ThHTMLAttributes } from 'react
 
 export const Table = React.forwardRef<HTMLTableElement, HTMLAttributes<HTMLTableElement>>(
   ({ className = '', ...props }, ref) => (
-    <div className="relative w-full overflow-hidden rounded-2xl bg-white shadow-lg border-0 dark:bg-gray-900/50 p-4 md:p-6">
-      <table
-        ref={ref}
-        className={`w-full caption-bottom text-sm ${className}`}
-        {...props}
-      />
+    <div className="relative w-full rounded-2xl bg-white shadow-lg border-0 dark:bg-gray-900/50 p-4 md:p-6">
+      <div className="w-full overflow-x-auto custom-scrollbar pb-2">
+        <table
+          ref={ref}
+          className={`w-full caption-bottom text-sm ${className} min-w-[800px]`}
+          {...props}
+        />
+      </div>
     </div>
   )
 );

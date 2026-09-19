@@ -326,8 +326,8 @@ export default async function AdminDashboardPage(props: {
               إدارة المنتجات &larr;
             </Link>
           </div>
-          <div className="overflow-x-auto">
-            <table className="w-full text-sm text-right">
+          <div className="overflow-x-auto custom-scrollbar pb-2">
+            <table className="w-full text-sm text-right min-w-[500px]">
               <thead className="bg-gray-50/50 dark:bg-gray-900/20 text-gray-500 dark:text-gray-400">
                 <tr>
                   <th className="px-6 py-3 font-medium">المنتج</th>
@@ -371,8 +371,8 @@ export default async function AdminDashboardPage(props: {
               عرض الكل &larr;
             </Link>
           </div>
-          <div className="overflow-x-auto">
-            <table className="w-full text-sm text-right">
+          <div className="overflow-x-auto custom-scrollbar pb-2">
+            <table className="w-full text-sm text-right min-w-[600px]">
               <thead className="bg-gray-50/50 dark:bg-gray-900/20 text-gray-500 dark:text-gray-400">
                 <tr>
                   <th className="px-6 py-3 font-medium">رقم الطلب</th>

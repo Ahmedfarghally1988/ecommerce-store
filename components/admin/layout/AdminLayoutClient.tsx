@@ -26,7 +26,7 @@ export function AdminLayoutClient({
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   return (
-    <div className="flex h-screen overflow-hidden bg-gray-50 dark:bg-gray-900">
+    <div className="flex h-dvh overflow-hidden bg-gray-50 dark:bg-gray-900">
       {/* Sidebar for desktop */}
       <div className="hidden md:flex md:flex-shrink-0">
         <AdminSidebar
