@@ -65,14 +65,14 @@ export default async function StorefrontHomepage({ params }: { params: Promise<{
               {locale === 'ar' ? <ArrowLeft className="w-4 h-4" /> : <ArrowRight className="w-4 h-4" />}
             </Link>
           </div>
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-7 gap-4">
-            {featuredCategories.map((category: any) => {
+          <div className="grid grid-cols-3 lg:grid-cols-7 gap-2 sm:gap-4">
+            {featuredCategories.map((category: any, index: number) => {
               const categoryName = locale === 'ar' ? (category.nameAr || category.nameEn) : (category.nameEn || category.nameAr);
               return (
                 <Link 
                   key={category.id} 
                   href={`/${locale}/category/${category.slug}`}
-                  className="group flex flex-col items-center text-center space-y-2"
+                  className={`group flex-col items-center text-center space-y-2 ${index === 7 ? 'flex lg:hidden' : 'flex'}`}
                 >
                   <div className="relative w-full aspect-square rounded-md overflow-hidden bg-gray-100 border border-gray-200 group-hover:border-gray-500 transition-colors">
                     {category.image && (

@@ -9,7 +9,7 @@ export const getFeaturedCategories = unstable_cache(async () => {
     const categories = await prisma.category.findMany({
       where: { isActive: true },
       orderBy: { sortOrder: "asc" },
-      take: 7
+      take: 8
     });
     return categories;
   } catch (error) {

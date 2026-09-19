@@ -63,15 +63,15 @@ export default async function ProductCard({ product, locale, variant = 'default'
         <ProductCardActions product={product} locale={locale} currency={currency} exchangeRate={exchangeRate} />
       </div>
       
-      <div className={variant === 'small' ? "p-3 flex flex-col flex-1" : "p-4 flex flex-col flex-1"}>
-        <div className="text-xs text-gray-500 mb-1">{locale === 'ar' ? product.category?.nameAr : product.category?.nameEn}</div>
-        <Link href={`/${locale}/products/${product.slug}`} className={`font-semibold text-gray-900 line-clamp-2 hover:text-black mb-2 ${variant === 'small' ? 'text-sm min-h-[2.5rem]' : 'min-h-[3rem]'}`}>
+      <div className={variant === 'small' ? "p-2 sm:p-3 flex flex-col flex-1" : "p-2.5 md:p-4 flex flex-col flex-1"}>
+        <div className="text-[10px] md:text-xs text-gray-500 mb-1">{locale === 'ar' ? product.category?.nameAr : product.category?.nameEn}</div>
+        <Link href={`/${locale}/products/${product.slug}`} className={`font-semibold text-gray-900 line-clamp-2 hover:text-black mb-1.5 md:mb-2 ${variant === 'small' ? 'text-xs sm:text-sm min-h-[2rem] sm:min-h-[2.5rem]' : 'text-xs sm:text-sm md:text-base min-h-[2rem] md:min-h-[3rem]'}`}>
           {locale === 'ar' ? product.nameAr : product.nameEn}
         </Link>
-        <div className="flex items-baseline gap-2 mt-2">
-          <span className={`font-bold text-black ${variant === 'small' ? 'text-base' : 'text-lg'}`}>{formatPrice(convertedPrice, currency, locale)}</span>
+        <div className="flex flex-wrap items-baseline gap-1 md:gap-2 mt-auto">
+          <span className={`font-bold text-black ${variant === 'small' ? 'text-sm sm:text-base' : 'text-sm sm:text-base md:text-lg'}`}>{formatPrice(convertedPrice, currency, locale)}</span>
           {convertedCompareAtPrice && convertedCompareAtPrice > 0 ? (
-            <span className={`text-gray-400 line-through ${variant === 'small' ? 'text-xs' : 'text-sm'}`}>{formatPrice(convertedCompareAtPrice, currency, locale)}</span>
+            <span className={`text-gray-400 line-through ${variant === 'small' ? 'text-[10px] sm:text-xs' : 'text-[10px] sm:text-xs md:text-sm'}`}>{formatPrice(convertedCompareAtPrice, currency, locale)}</span>
           ) : null}
         </div>
       </div>

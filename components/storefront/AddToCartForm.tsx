@@ -106,27 +106,16 @@ export default function AddToCartForm({ product, variants }: AddToCartFormProps)
 
   return (
     <div className="flex flex-col gap-6">
-      <div className="flex items-center justify-between border-b border-gray-100 pb-6">
-        <div className="flex flex-col gap-2">
-          <div className="flex items-center gap-4">
-            <span className="text-3xl font-bold">{formatPrice(convertPrice(currentPrice, exchangeRate), currency, locale)}</span>
-            {isOutOfStock ? (
-              <span className="text-sm font-medium text-red-500 bg-red-50 px-3 py-1 rounded-full">{t('outOfStock')}</span>
-            ) : currentStock <= 5 ? (
-              <span className="text-sm font-medium text-orange-500 bg-orange-50 px-3 py-1 rounded-full">{t('lowStock')}</span>
-            ) : (
-              <span className="text-sm font-medium text-green-500 bg-green-50 px-3 py-1 rounded-full">{t('inStock')}</span>
-            )}
-          </div>
-        </div>
-        <div className="flex flex-col items-end gap-1">
-          <label className="text-xs text-gray-500 font-medium">{t('quantity')}</label>
-          <QuantityControl 
-            quantity={quantity} 
-            onIncrease={() => setQuantity(q => Math.min(q + 1, currentStock))}
-            onDecrease={() => setQuantity(q => Math.max(1, q - 1))}
-            max={currentStock}
-          />
+      <div className="flex flex-col border-b border-gray-100 pb-6">
+        <div className="flex items-center gap-4">
+          <span className="text-3xl font-bold">{formatPrice(convertPrice(currentPrice, exchangeRate), currency, locale)}</span>
+          {isOutOfStock ? (
+            <span className="text-sm font-medium text-red-500 bg-red-50 px-3 py-1 rounded-full">{t('outOfStock')}</span>
+          ) : currentStock <= 5 ? (
+            <span className="text-sm font-medium text-orange-500 bg-orange-50 px-3 py-1 rounded-full">{t('lowStock')}</span>
+          ) : (
+            <span className="text-sm font-medium text-green-500 bg-green-50 px-3 py-1 rounded-full">{t('inStock')}</span>
+          )}
         </div>
       </div>
 
@@ -179,8 +168,18 @@ export default function AddToCartForm({ product, variants }: AddToCartFormProps)
         </div>
       ) : null}
 
-      <div className="flex items-center gap-3 pt-6 mt-4">
-        <button
+      <div className="flex flex-col gap-3 pt-4 mt-2">
+        <div className="flex flex-row items-center justify-between bg-gray-50 border border-gray-100 p-2 rounded-lg w-full">
+          <label className="text-sm text-gray-700 font-medium px-2">{t('quantity')}</label>
+          <QuantityControl 
+            quantity={quantity} 
+            onIncrease={() => setQuantity(q => Math.min(q + 1, currentStock))}
+            onDecrease={() => setQuantity(q => Math.max(1, q - 1))}
+            max={currentStock}
+          />
+        </div>
+        <div className="flex items-center gap-3">
+          <button
           onClick={handleAddToCart}
           disabled={isOutOfStock || (variants.length > 0 && !selectedVariant)}
           className="flex-1 bg-white text-black border border-black py-3 rounded-lg font-semibold hover:bg-gray-50 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
@@ -197,6 +196,7 @@ export default function AddToCartForm({ product, variants }: AddToCartFormProps)
         >
           {locale === 'ar' ? 'شراء الآن' : 'Buy Now'}
         </button>
+        </div>
       </div>
     </div>
   );
